@@ -1,0 +1,40 @@
+version: "2"
+
+# Related repos must be installed under the same parent as this repo.
+# sd-frontend: https://github.com/StartingDreams/sd-frontend
+# sd-mongo: https://github.com/StartingDreams/sd-mongo
+# sd-redis: https://github.com/StartingDreams/sd-redis
+
+
+services:
+
+  frontend:
+    container_name: frontend
+    env_file: .env
+    build:
+      context: ../sd-frontend
+    volumes:
+      - ../sd-frontend:/var/www
+    ports:
+      - "8080:3000"
+    networks:
+      - frontend
+      - backend
+
+  mongo:
+    container_name: mongo
+    env_file: .env
+    build:
+      context: ../sd-mongo
+    volumes:
+      - ../sd-mongo/data/:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
